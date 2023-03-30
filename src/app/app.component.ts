@@ -1,10 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, NgModule } from '@angular/core';
+import {FormsModule} from '@angular/forms';
+
 
 import { Store } from "@ngrx/store";
 import { Observable } from "rxjs";
 
+import { Post } from "./models/post.model";
+import * as PostActions from "./actions/post.actions";
+
 interface AppState {
-    message: string;
+    // message: string;
+    post: Post;
 }
 
 @Component({
@@ -12,46 +18,59 @@ interface AppState {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
+
 export class AppComponent {
     title = 'ngrxAngular';
-    message$: Observable<string>;
+    // message$: Observable<string>;
+    post: Observable<Post>;
+    text!: string;
 
-    constructor(
-        private store: Store<AppState>
-    ){
-        this.message$ = this.store.select("message");
+
+    constructor(private store: Store<AppState>) {
+        // this.message$ = this.store.select("message");
+        this.post = this.store.select("post");
     }
 
-    spanishMessage() {
-        this.store.dispatch({
-            type: "SPANISH",
-        })
+    editText() {
+        this.store.dispatch(new PostActions.EditText(this.text));
+    }
+    resetPost() {
+        this.store.dispatch(new PostActions.Reset());
+    }
+    upVote() {
+        this.store.dispatch(new PostActions.Upvote());
+    }
+    downVote() {
+        this.store.dispatch(new PostActions.Downvote());
     }
 
-    frenchMessage() {
-        this.store.dispatch({
-            type: "FRENCH",
-        })
-    }
+    // spanishMessage() {
+    //     this.store.dispatch({
+    //         type: "SPANISH",
+    //     })
+    // }
 
-    indonesianMessage() {
-        this.store.dispatch({
-            type: "INDONESIAN",
-        })
-    }
+    // frenchMessage() {
+    //     this.store.dispatch({
+    //         type: "FRENCH",
+    //     })
+    // }
+
+    // indonesianMessage() {
+    //     this.store.dispatch({
+    //         type: "INDONESIAN",
+    //     })
+    // }
     
-    germanMessage() {
-        this.store.dispatch({
-            type: "GERMAN",
-        })
-    }
+    // germanMessage() {
+    //     this.store.dispatch({
+    //         type: "GERMAN",
+    //     })
+    // }
     
-    dutchMessage() {
-        this.store.dispatch({
-            type: "DUTCH",
-        })
-    }
-
-
-
+    // dutchMessage() {
+    //     this.store.dispatch({
+    //         type: "DUTCH",
+    //     })
+    // }
 }
